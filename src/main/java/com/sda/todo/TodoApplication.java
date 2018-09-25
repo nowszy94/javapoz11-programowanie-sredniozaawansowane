@@ -24,9 +24,7 @@ public class TodoApplication {
 
     public static void main(String[] args) {
         TodoRepository todoRepository = new InMemoryTodoRepository();
-        TodoUserRepository todoUserRepository = new InMemoryTodoUserRepository(
-                Arrays.asList(new TodoUser("Szymon", "blabla"))
-        );
+        TodoUserRepository todoUserRepository = new InMemoryTodoUserRepository();
         TodoService todoService = new TodoService(todoRepository, todoUserRepository);
 
         Scanner scanner = new Scanner(System.in);
@@ -44,6 +42,7 @@ public class TodoApplication {
                     login();
                     break;
                 case 2:
+                    register();
                     break;
                 case 3:
                     addNewTodo();
@@ -56,6 +55,19 @@ public class TodoApplication {
         } while (true);
     }
 
+    private void register() {
+        String name = todoConsoleView.registerName();
+        String password = todoConsoleView.registerPassword();
+        TodoUser user = todoService.register(name, password);
+
+        if (user == null) {
+            todoConsoleView.displayError("Nie mozna zarejestrowaz uzytkownika.\n" +
+                    "Uzytkownik o podanej nazwie juz istnieje");
+        } else {
+            todoConsoleView.displaySuccess("Udalo sie zarejestrowac nowego uzytkownika!");
+        }
+    }
+
     private void login() {
         this.currentUser = null;
         String name = todoConsoleView.logInName();
@@ -65,6 +77,10 @@ public class TodoApplication {
             this.currentUser = todoService.login(name, password);
         } catch (TodoUserDoesNotExistsException | InvalidPasswordException e) {
             todoConsoleView.displayError(e.getMessage());
+        }
+
+        if (this.currentUser != null) {
+            todoConsoleView.displaySuccess("Uzytkownik o nicku \"" + name + "\" zalogowany");
         }
     }
 
