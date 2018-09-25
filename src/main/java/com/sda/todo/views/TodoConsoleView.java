@@ -1,5 +1,11 @@
 package com.sda.todo.views;
 
+import com.sda.todo.model.Todo;
+import com.sda.todo.model.TodoStatus;
+import com.sda.todo.model.TodoUser;
+
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class TodoConsoleView {
@@ -64,5 +70,32 @@ public class TodoConsoleView {
         System.out.println(message);
         System.out.println("SUCCESS");
         System.out.println();
+    }
+
+    public void exit() {
+        System.out.println("Zapraszamy ponownie");
+    }
+
+    public Integer showToDoListWithOptions(List<Todo> allToDo) {
+        System.out.println("Lista Zadań");
+        System.out.println("------------");
+        for (int i = 0; i < allToDo.size(); i++) {
+            Todo todo = allToDo.get(i);
+            TodoUser creator = todo.getCreator();
+            Optional<TodoUser> owner = Optional.ofNullable(todo.getOwner());
+            TodoStatus todoStatus = todo.getTodoStatus();
+            System.out.println((i + 1) +
+                    ". |\"" + todo.getName() +
+                    "\" |\"" + creator.getName() +
+                    "\"|\" " + owner.orElse(TodoUser.unnasigned()).getName() +
+                    "\"|" + todoStatus.toString().toUpperCase());
+        }
+        System.out.println("----------------");
+        System.out.println("1: Wyswietl");
+        System.out.println("2: Usuń");
+        System.out.println("3: Przypisz");
+        System.out.println("4: Zmien Status");
+        System.out.println("0: Wyjdz");
+        return null;
     }
 }

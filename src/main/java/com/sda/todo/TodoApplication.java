@@ -35,6 +35,7 @@ public class TodoApplication {
     }
 
     public void start() {
+        Boolean flag = true;
         do {
             Integer menuOption = todoConsoleView.menu();
             switch (menuOption) {
@@ -48,11 +49,19 @@ public class TodoApplication {
                     addNewTodo();
                     break;
                 case 4:
+                    listTodoList();
                     break;
+                case 0:
                 default:
+                    todoConsoleView.exit();
+                    flag = false;
                     break;
             }
-        } while (true);
+        } while (flag);
+    }
+
+    private void listTodoList() {
+        todoConsoleView.showToDoListWithOptions(todoService.findAllTodos());
     }
 
     private void register() {
@@ -88,12 +97,14 @@ public class TodoApplication {
         if (currentUser == null) {
             login();
         }
+        if (currentUser != null) {
 
-        String todoName = todoConsoleView.createNewTodoName();
-        String todoDescription = todoConsoleView.createNewTodoDescription();
-        Todo todo = new Todo(todoName, this.currentUser);
-        todo.setDescription(todoDescription);
+            String todoName = todoConsoleView.createNewTodoName();
+            String todoDescription = todoConsoleView.createNewTodoDescription();
+            Todo todo = new Todo(todoName, this.currentUser);
+            todo.setDescription(todoDescription);
 
-        todoService.save(todo);
+            todoService.save(todo);
+        }
     }
 }
