@@ -13,4 +13,6 @@ public interface TodoRepository {
     Optional<Todo> findById(Integer id);
 
     List<Todo> findAll();
+
+    void remove(int todoId);
 }

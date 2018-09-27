@@ -62,19 +62,37 @@ public class TodoApplication {
 
     private void listTodoList() {
         Integer option = todoConsoleView.showToDoListWithOptions(todoService.findAllTodos());
+        String possibleId = todoConsoleView.getPossibleId();
         switch (option) {
             case 1:
-                showTodo();
+                showTodo(possibleId);
+                break;
+            case 2:
+                removeTodo(possibleId);
                 break;
         }
     }
 
-    private void showTodo() {
-        Integer todoId = todoConsoleView.getTodoId() - 1;
-
+    private void showTodo(String possibleId) {
+        Integer todoId = extractTodoId(possibleId);
         Optional<Todo> todo = todoService.findTodoById(todoId);
-
         todoConsoleView.showTodoWithDetails(todo);
+    }
+
+    private void removeTodo(String possibleId) {
+        Integer todoId = extractTodoId(possibleId);
+        Optional<Todo> removedTodo = todoService.removeTodo(todoId);
+        todoConsoleView.displayTodoRemove(removedTodo);
+    }
+
+    private Integer extractTodoId(String possibleId) {
+        Integer todoId;
+        if (possibleId.length() == 0) {
+            todoId = todoConsoleView.getTodoId() - 1;
+        } else {
+            todoId = Integer.valueOf(possibleId) - 1;
+        }
+        return todoId;
     }
 
     private void register() {

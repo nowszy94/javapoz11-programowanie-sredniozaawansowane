@@ -48,4 +48,11 @@ public class TodoService {
         return todoRepository.findById(todoId);
     }
 
+    public Optional<Todo> removeTodo(Integer todoId) {
+        Optional<Todo> todo = findTodoById(todoId);
+        if (todo.isPresent()) {
+            todoRepository.remove(todoId);
+        }
+        return todo;
+    }
 }

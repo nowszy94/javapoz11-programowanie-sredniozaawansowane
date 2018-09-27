@@ -98,7 +98,7 @@ public class TodoConsoleView {
         System.out.println("0: Wyjdz");
 
         int option = scanner.nextInt();
-        scanner.nextLine();
+//        scanner.nextLine();
         return option;
     }
 
@@ -128,5 +128,24 @@ public class TodoConsoleView {
 //        }
 
         System.out.println(message);
+    }
+
+    public String getPossibleId() {
+        String possibleId = scanner.nextLine();
+
+//        if (possibleId.length() > 0) {
+//            return possibleId.substring(1);
+//        } else {
+//            return possibleId;
+//        }
+
+        return possibleId.length() > 0 ?
+                possibleId.substring(1) :
+                possibleId;
+    }
+
+    public void displayTodoRemove(Optional<Todo> removedTodo) {
+        System.out.println(removedTodo.map(e -> "Usunieto zadanie " + e.getName())
+                .orElse("Zadanie nie istnieje"));
     }
 }
