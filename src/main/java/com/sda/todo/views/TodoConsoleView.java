@@ -96,6 +96,37 @@ public class TodoConsoleView {
         System.out.println("3: Przypisz");
         System.out.println("4: Zmien Status");
         System.out.println("0: Wyjdz");
-        return null;
+
+        int option = scanner.nextInt();
+        scanner.nextLine();
+        return option;
+    }
+
+    public Integer getTodoId() {
+        System.out.println("Podaj numer zadania");
+        int todoId = scanner.nextInt();
+        scanner.nextLine();
+        return todoId;
+    }
+
+    public void showTodoWithDetails(Optional<Todo> todo) {
+        String message = todo.map(e -> {
+            TodoUser creator = e.getCreator();
+            Optional<TodoUser> owner = Optional.ofNullable(e.getOwner());
+            return e.getName() + " (" + e.getTodoStatus().toString() + ") (" + e.getCreationDate().toString() + ")\n" +
+                    e.getDescription() + "\n" +
+                    "Tworca: " + creator.getName() + "\n" +
+                    "Przypisane: " + owner.orElse(TodoUser.unnasigned()).getName();
+        }).orElse("Zadanie nie istnieje");
+
+//        String message2;
+//        if (todo.isPresent()) {
+//            Todo todo1 = todo.get();
+//            message2 = "...."
+//        } else {
+//            message2 = "Zadanie nie istnieje";
+//        }
+
+        System.out.println(message);
     }
 }

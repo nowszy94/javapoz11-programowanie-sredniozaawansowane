@@ -29,6 +29,22 @@ public class InMemoryTodoRepository implements TodoRepository {
     }
 
     @Override
+    public Optional<Todo> findById(Integer id) {
+//        if (id >= 0 && id < todos.size()) {
+//            return Optional.of(todos.get(id));
+//        }
+//        return Optional.empty();
+
+//        String message = id % 2 == 0 ?
+//                "even" :
+//                "odd";
+
+        return (id >= 0 && id < todos.size()) ?
+                Optional.of(todos.get(id)) :
+                Optional.empty();
+    }
+
+    @Override
     public List<Todo> findAll() {
         return new ArrayList<>(todos); //zwracac kopie listy
     }

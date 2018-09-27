@@ -10,5 +10,7 @@ public interface TodoRepository {
 
     Optional<Todo> findById(String id);
 
+    Optional<Todo> findById(Integer id);
+
     List<Todo> findAll();
 }
