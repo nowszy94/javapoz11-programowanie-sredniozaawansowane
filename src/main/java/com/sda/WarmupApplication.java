@@ -1,5 +1,8 @@
 package com.sda;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class WarmupApplication {
@@ -20,19 +23,32 @@ public class WarmupApplication {
             double result = performOperation(operation, a, b);
             System.out.println("Result: " + result);
         } else {
-            int sum = 0;
+            List<Integer> numbers = new ArrayList<>();
             while (scanner.hasNextInt()) {
-                sum += scanner.nextInt();
+                numbers.add(scanner.nextInt());
             }
-            System.out.println("Suma wielu: " + sum);
+            Integer[] numbersArray = new Integer[numbers.size()];
+            numbersArray = numbers.toArray(numbersArray);
+            System.out.println(performSumVarargs(numbersArray));
+
+            performSumVarargs(1, 2, 3, 4, 5);
+            performSumVarargs(numbersArray);
         }
+    }
+
+    private static double performSumVarargs(Integer... args) {
+        double result = 0;
+        for (int arg : args) {
+            result += arg;
+        }
+        return result;
     }
 
     private static double performOperation(int operation, int a, int b) {
         double result;
         switch (operation) {
             case 1:
-                result = a + b;
+                result = performSumVarargs(a, b);
                 break;
             case 2:
                 result = a - b;
