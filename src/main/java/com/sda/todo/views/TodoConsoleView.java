@@ -153,4 +153,15 @@ public class TodoConsoleView {
         System.out.println(todo.map(e -> "Przypisano " + currentUser.getName() + " do zadania \"" + e.getName() + "\"")
                 .orElse("Zadanie nie istnieje"));
     }
+
+    public void displayChangeStatus(Optional<Todo> todo) {
+        System.out.println(todo.map(e -> "Zmieniono status zadania " + e.getName() + " na " + e.getTodoStatus())
+                .orElse("Zadanie nie istnieje"));
+    }
+
+    public TodoStatus getStatus() {
+        System.out.println("Podaj status (New, Active, Closed)");
+        String status = scanner.nextLine();
+        return TodoStatus.valueOf(status);
+    }
 }
