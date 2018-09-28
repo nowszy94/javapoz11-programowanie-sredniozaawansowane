@@ -148,4 +148,9 @@ public class TodoConsoleView {
         System.out.println(removedTodo.map(e -> "Usunieto zadanie " + e.getName())
                 .orElse("Zadanie nie istnieje"));
     }
+
+    public void displayAssignment(Optional<Todo> todo, TodoUser currentUser) {
+        System.out.println(todo.map(e -> "Przypisano " + currentUser.getName() + " do zadania \"" + e.getName() + "\"")
+                .orElse("Zadanie nie istnieje"));
+    }
 }
