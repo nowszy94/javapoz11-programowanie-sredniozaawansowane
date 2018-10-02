@@ -10,11 +10,21 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class TodoService {
     private TodoRepository todoRepository;
     private TodoUserRepository todoUserRepository;
+
+    public List<Todo> findTodosByCreatorName(String creatorName) {
+        return todoRepository.findAll()
+                .stream()
+                .filter(todo -> todo.getCreator()
+                        .getName()
+                        .equalsIgnoreCase(creatorName))
+                .collect(Collectors.toList());
+    }
 
     public void save(Todo todo) {
         todoRepository.save(todo);
