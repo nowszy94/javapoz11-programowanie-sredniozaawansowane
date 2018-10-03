@@ -1,8 +1,13 @@
 package com.sda.hangman.application;
 
+import com.sda.hangman.domain.ForbiddenWordsValidator;
 import com.sda.hangman.domain.GameFactory;
+import com.sda.hangman.domain.PhraseService;
+import com.sda.hangman.domain.exceptions.ForbiddenWordsInPhraseException;
+import com.sda.hangman.domain.exceptions.PhraseAlreadyExistsException;
 import com.sda.hangman.domain.model.Game;
 import com.sda.hangman.domain.model.GameStatus;
+import com.sda.hangman.infrastructure.memory.InMemoryForbiddenWordsRepository;
 import com.sda.hangman.infrastructure.memory.InMemoryPhraseRepository;
 
 import java.util.Arrays;
@@ -12,10 +17,17 @@ public class ConsoleApplication {
 
     private ConsoleViews consoleViews;
     private GameFactory gameFactory;
+    private PhraseService phraseService;
 
     public ConsoleApplication() {
-        this.gameFactory = new GameFactory(new InMemoryPhraseRepository(Arrays.asList("Ala ma kota", "Wielkopolska", "Andrzej Duda")));
+        InMemoryPhraseRepository phraseRepository = new InMemoryPhraseRepository(Arrays.asList("Ala ma kota", "Wielkopolska", "Andrzej Duda"));
+        ForbiddenWordsValidator forbiddenWordsValidator = new ForbiddenWordsValidator(
+                new InMemoryForbiddenWordsRepository(Arrays.asList("zlodziej", "oszust"))
+        );
+
+        this.gameFactory = new GameFactory(phraseRepository);
         this.consoleViews = new ConsoleViews(new Scanner(System.in));
+        this.phraseService = new PhraseService(phraseRepository, forbiddenWordsValidator);
     }
 
     public void start() {
@@ -27,7 +39,7 @@ public class ConsoleApplication {
                     startGame();
                     break;
                 case 2:
-                    System.out.println("Tutaj beda wyniki");
+                    addPhrase();
                     break;
                 case 0:
                     flag=false;
@@ -53,6 +65,18 @@ public class ConsoleApplication {
             consoleViews.displayGameWon();
         } else {
             consoleViews.displayGameLose();
+        }
+    }
+
+    private void addPhrase() {
+        String phrase = consoleViews.addPhraseMessage();
+        try {
+            phraseService.addPhrase(phrase);
+            consoleViews.displayPhraseAddedSuccessfully(phrase);
+        } catch (ForbiddenWordsInPhraseException e) {
+            consoleViews.displayPhraseContainsForbiddenWords();
+        } catch (PhraseAlreadyExistsException e) {
+            consoleViews.displayPhraseAlreadyExists();
         }
     }
 }

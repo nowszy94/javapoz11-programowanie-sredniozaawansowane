@@ -13,7 +13,7 @@ public class ConsoleViews {
 
     public Integer mainMenu() {
         System.out.println("1. Start");
-        System.out.println("2. Wyniki");
+        System.out.println("2. Dodaj fraze");
         System.out.println("0. Koniec");
         return getIntValue();
     }
@@ -43,6 +43,26 @@ public class ConsoleViews {
 
     public void displayGameLose() {
         System.out.println("Przegrales/Przegralas!");
+        waitForAction();
+    }
+
+    public String addPhraseMessage() {
+        System.out.println("Podaj fraze");
+        return scanner.nextLine();
+    }
+
+    public void displayPhraseContainsForbiddenWords() {
+        System.out.println("Podana fraza zawiera zabronione slowa");
+        waitForAction();
+    }
+
+    public void displayPhraseAlreadyExists() {
+        System.out.println("Podana fraza juz istnieje");
+        waitForAction();
+    }
+
+    public void displayPhraseAddedSuccessfully(String phrase) {
+        System.out.println("Pomyslnie dodano fraze " + phrase);
         waitForAction();
     }
 
