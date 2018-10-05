@@ -56,6 +56,11 @@ public class ConsoleViews {
     }
 
     private void displayShortenedBook(Book book) {
-        System.out.println(book.getTitle() + "(" + book.getYear() + ") - " + book.getAuthor());
+        System.out.println(book.getTitle() + " (" + book.getYear() + ") - " + book.getAuthor());
+    }
+
+    public String getAuthor() {
+        System.out.println("Podaj autora ksiazki");
+        return scanner.nextLine();
     }
 }
