@@ -64,4 +64,9 @@ public class ConsoleViews {
         System.out.println("Podaj autora ksiazki");
         return scanner.nextLine();
     }
+
+    public Integer getDate() {
+        System.out.println("Podaj date wydania");
+        return getNumberFromUser();
+    }
 }

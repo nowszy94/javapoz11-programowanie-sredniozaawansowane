@@ -38,6 +38,15 @@ public class BooksService {
         return filterBooks(parameters);
     }
 
+    public List<Book> findByDate(Integer date) {
+        if (date == null) {
+            return Collections.emptyList();
+        }
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("YEAR", date);
+        return filterBooks(parameters);
+    }
+
     private List<Book> filterBooks(Map<String, Object> filterParameters) {
         return chain.filter(booksRepository.findAll(), filterParameters)
                 .collect(Collectors.toList());

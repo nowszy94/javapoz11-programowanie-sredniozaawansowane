@@ -55,6 +55,11 @@ public class ConsoleApplication {
                 List<Book> booksByAuthor = booksService.findByAuthor(author);
                 consoleViews.displayBooks(booksByAuthor);
                 break;
+            case 3:
+                Integer date = consoleViews.getDate();
+                List<Book> booksByDate = booksService.findByDate(date);
+                consoleViews.displayBooks(booksByDate);
+                break;
         }
     }
 }

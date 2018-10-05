@@ -21,9 +21,9 @@ public class BooksServiceTest {
         this.booksRepository = Mockito.mock(BooksRepository.class);
         Mockito.when(booksRepository.findAll()).thenReturn(
                 Arrays.asList(
-                        Book.builder().title("Dziady III").author("Adam Mickiewicz").build(),
-                        Book.builder().title("Dziady IV").author("Adam Mickiewicz").build(),
-                        Book.builder().title("W pustyni i w puszczy").author("Henryk Sienkiewicz").build())
+                        Book.builder().title("Dziady III").author("Adam Mickiewicz").year(2000).build(),
+                        Book.builder().title("Dziady IV").author("Adam Mickiewicz").year(1999).build(),
+                        Book.builder().title("W pustyni i w puszczy").author("Henryk Sienkiewicz").year(2000).build())
         );
         this.booksService = new BooksService(booksRepository);
     }
@@ -135,6 +135,43 @@ public class BooksServiceTest {
 
         //when
         List<Book> books = booksService.findByAuthor(author);
+
+        //then
+        Assert.assertEquals(0, books.size());
+    }
+
+    @Test
+    public void findByDateShouldReturnEmptyListForNullDate() {
+        //given
+        Integer date = null;
+
+        //when
+        List<Book> books = booksService.findByDate(date);
+
+        //then
+        Assert.assertEquals(0, books.size());
+    }
+
+    @Test
+    public void findByDateShouldReturnItemsForExistingDate() {
+        //given
+        Integer date = 2000;
+
+        //when
+        List<Book> books = booksService.findByDate(date);
+
+        //then
+        Assert.assertEquals(2, books.size());
+        books.forEach(book -> Assert.assertEquals(book.getYear(), date));
+    }
+
+    @Test
+    public void findByDateShouldReturnEmptyListForNonExistingDate() {
+        //given
+        Integer date = 0;
+
+        //when
+        List<Book> books = booksService.findByDate(date);
 
         //then
         Assert.assertEquals(0, books.size());
