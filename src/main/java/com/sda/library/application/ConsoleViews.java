@@ -25,7 +25,9 @@ public class ConsoleViews {
     public Integer showBooksMenu() {
         System.out.println("1. Znajdz po nazwie");
         System.out.println("2. Znajdz po autorze");
-        System.out.println("3. Znajdz po datcie wydania");
+        System.out.println("3. Znajdz po dacie wydania");
+        System.out.println("4. Znajdz po jezyku wydania");
+        System.out.println("5. Znajdz po zakresie stron");
         System.out.println("0. Wyjdz");
         return getNumberFromUser();
     }
@@ -68,5 +70,25 @@ public class ConsoleViews {
     public Integer getDate() {
         System.out.println("Podaj date wydania");
         return getNumberFromUser();
+    }
+
+    public String getLanguage() {
+        System.out.println("Podaj jezyk");
+        return scanner.nextLine();
+    }
+
+    public Integer getFromPages() {
+        System.out.println("Podaj dolny zakres stron");
+        return getNumberFromUser();
+    }
+
+    public Integer getToPages() {
+        System.out.println("Podaj gorny zakres stron");
+        return getNumberFromUser();
+    }
+
+    public void displayError(String message) {
+        System.out.println("ERROR " + message);
+        waitForAction();
     }
 }

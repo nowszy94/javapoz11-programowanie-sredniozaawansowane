@@ -1,5 +1,6 @@
 package com.sda.library.domain;
 
+import com.sda.library.domain.exceptions.InvalidPagesValueException;
 import com.sda.library.domain.model.Book;
 import com.sda.library.domain.port.BooksRepository;
 import org.junit.Assert;
@@ -21,9 +22,9 @@ public class BooksServiceTest {
         this.booksRepository = Mockito.mock(BooksRepository.class);
         Mockito.when(booksRepository.findAll()).thenReturn(
                 Arrays.asList(
-                        Book.builder().title("Dziady III").author("Adam Mickiewicz").year(2000).build(),
-                        Book.builder().title("Dziady IV").author("Adam Mickiewicz").year(1999).build(),
-                        Book.builder().title("W pustyni i w puszczy").author("Henryk Sienkiewicz").year(2000).build())
+                        Book.builder().title("Dziady III").author("Adam Mickiewicz").year(2000).language("Polish").pages(250).build(),
+                        Book.builder().title("Dziady IV").author("Adam Mickiewicz").year(1999).language("Polish").pages(190).build(),
+                        Book.builder().title("W pustyni i w puszczy").author("Henryk Sienkiewicz").year(2000).language("Polish").pages(150).build())
         );
         this.booksService = new BooksService(booksRepository);
     }
@@ -175,5 +176,119 @@ public class BooksServiceTest {
 
         //then
         Assert.assertEquals(0, books.size());
+    }
+
+    @Test
+    public void findByLanguageShouldReturnEmptyListForNullLanguage() {
+        //given
+        String language = null;
+
+        //when
+        List<Book> books = booksService.findByLanguage(language);
+
+        //then
+        Assert.assertEquals(0, books.size());
+    }
+    @Test
+    public void findByLanguageShouldReturnEmptyListForEmptyLanguage() {
+        //given
+        String language = "";
+
+        //when
+        List<Book> books = booksService.findByLanguage(language);
+
+        //then
+        Assert.assertEquals(0, books.size());
+    }
+    @Test
+    public void findByLanguageShouldReturnItemsForExistingLanguage() {
+        //given
+        String language = "Polish";
+
+        //when
+        List<Book> books = booksService.findByLanguage(language);
+
+        //then
+        Assert.assertEquals(3, books.size());
+        books.forEach(book -> Assert.assertTrue(book.getLanguage().contains(language)));
+    }
+    @Test
+    public void findByLanguageShouldReturnEmptyListForNonExistingLanguage() {
+        //given
+        String language = "non-existing";
+
+        //when
+        List<Book> books = booksService.findByLanguage(language);
+
+        //then
+        Assert.assertEquals(0, books.size());
+    }
+
+    @Test
+    public void findByPagesRangeShouldReturnBooksForValidPagesRange() throws InvalidPagesValueException {
+        //given
+        Integer from = 100;
+        Integer to = 200;
+
+        //when
+        List<Book> books = booksService.findByPagesRange(from, to);
+
+        //then
+        Assert.assertEquals(2, books.size());
+        books.forEach(e -> Assert.assertTrue(e.getPages() >= from && e.getPages() <= to));
+    }
+
+    @Test
+    public void findByPagesRangeShouldReturnBooksWhenFromIsEqualToTo() throws InvalidPagesValueException {
+        //given
+        Integer from = 150;
+        Integer to = from;
+
+        //when
+        List<Book> books = booksService.findByPagesRange(from, to);
+
+        //then
+        Assert.assertEquals(1, books.size());
+        Assert.assertEquals(from, books.get(0).getPages());
+    }
+
+    @Test(expected = InvalidPagesValueException.class)
+    public void findByPagesRangeShouldThrowExceptionWhenFromIsNegative() throws InvalidPagesValueException {
+        //given
+        Integer from = -100;
+        Integer to = 100;
+
+        //when
+        booksService.findByPagesRange(from, to);
+    }
+
+    @Test(expected = InvalidPagesValueException.class)
+    public void findByPagesRangeShouldThrowExceptionWhenToIsNegative() throws InvalidPagesValueException {
+        //given
+        Integer from = 100;
+        Integer to = -100;
+
+        //when
+        booksService.findByPagesRange(from, to);
+    }
+
+    @Test(expected = InvalidPagesValueException.class)
+    public void findByPagesRangeShouldThrowExceptionWhenFromAndToAreBothNegative() throws InvalidPagesValueException {
+        //given
+        Integer from = -100;
+        Integer to = -50;
+
+        //then
+        booksService.findByPagesRange(from, to);
+    }
+
+    @Test(expected = InvalidPagesValueException.class)
+    public void findByPagesRangeShouldThrowExceptionWhenFromIsBiggerThanTo() throws InvalidPagesValueException {
+        //given
+        Integer from = 150;
+        Integer to = 50;
+
+        //when
+        booksService.findByPagesRange(from, to);
     }
 }

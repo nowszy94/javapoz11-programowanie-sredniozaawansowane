@@ -1,5 +1,6 @@
 package com.sda.library.domain;
 
+import com.sda.library.domain.exceptions.InvalidPagesValueException;
 import com.sda.library.domain.filtering.BooksFilteringChain;
 import com.sda.library.domain.model.Book;
 import com.sda.library.domain.port.BooksRepository;
@@ -36,6 +37,36 @@ public class BooksService {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("AUTHOR", author);
         return filterBooks(parameters);
+    }
+
+    public List<Book> findByLanguage(String language) {
+        return findBy(language, "LANGUAGE");
+    }
+
+    private List<Book> findBy(String value, String key) {
+        if (StringUtils.isBlank(value)) {
+            return Collections.emptyList();
+        }
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put(key, value);
+        return filterBooks(parameters);
+    }
+
+    public List<Book> findByPagesRange(Integer from, Integer to) throws InvalidPagesValueException {
+        validatePagesRangeArgument(from, to);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("PAGES_FROM", from);
+        parameters.put("PAGES_TO", to);
+        return filterBooks(parameters);
+    }
+
+    private void validatePagesRangeArgument(Integer from, Integer to) throws InvalidPagesValueException {
+        if (from < 0 || to < 0) {
+            throw new InvalidPagesValueException("Arguments can not be negative");
+        }
+        if (from > to) {
+            throw new InvalidPagesValueException("From can not be greater than to");
+        }
     }
 
     public List<Book> findByDate(Integer date) {

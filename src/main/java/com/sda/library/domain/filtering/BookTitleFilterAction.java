@@ -4,17 +4,17 @@ import com.sda.library.domain.model.Book;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.function.Predicate;
 
-public class BookTitleFilterAction implements FilterAction {
+public class BookTitleFilterAction extends SimpleAbstractFilterAction {
 
     @Override
-    public boolean isMyResponsibility(Map<String, Object> parameters) {
-        return parameters.containsKey("TITLE");
+    protected String getKey() {
+        return "TITLE";
     }
 
     @Override
-    public Stream<Book> action(Stream<Book> stream, Map<String, Object> parameters) {
-        return stream.filter(e -> StringUtils.containsIgnoreCase(e.getTitle(), (String) parameters.get("TITLE")));
+    protected Predicate<Book> predicate(Map<String, Object> parameters) {
+        return e -> StringUtils.containsIgnoreCase(e.getTitle(), (String) parameters.get("TITLE"));
     }
 }
