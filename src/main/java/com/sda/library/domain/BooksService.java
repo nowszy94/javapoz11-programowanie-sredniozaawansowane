@@ -82,4 +82,17 @@ public class BooksService {
         return chain.filter(booksRepository.findAll(), filterParameters)
                 .collect(Collectors.toList());
     }
+
+    public Map<String, Long> getAuthors() {
+        List<Book> books = booksRepository.findAll();
+        return books.stream()
+                .map(e -> e.getAuthor())
+                .distinct()
+                .collect(Collectors.toMap(
+                        author -> author,
+                        author -> books.stream()
+                                .filter(book -> author.equals(book.getAuthor()))
+                                .count())
+                );
+    }
 }

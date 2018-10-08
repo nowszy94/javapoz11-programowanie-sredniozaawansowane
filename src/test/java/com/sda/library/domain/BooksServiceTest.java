@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class BooksServiceTest {
 
@@ -290,5 +291,15 @@ public class BooksServiceTest {
 
         //when
         booksService.findByPagesRange(from, to);
+    }
+
+    @Test
+    public void getAuthorsShouldReturnAuthors() {
+        //when
+        Map<String, Long> authors = booksService.getAuthors();
+
+        //then
+        Assert.assertEquals(authors.get("Adam Mickiewicz"), new Long(2));
+        Assert.assertEquals(authors.get("Henryk Sienkiewicz"), new Long(1));
     }
 }

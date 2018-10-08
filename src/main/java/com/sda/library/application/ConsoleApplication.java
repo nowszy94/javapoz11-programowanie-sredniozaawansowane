@@ -8,7 +8,10 @@ import com.sda.library.infrastructure.json.JsonBooksRepository;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ConsoleApplication {
 
@@ -31,6 +34,8 @@ public class ConsoleApplication {
                 case 1:
                     showBooks();
                     break;
+                case 2:
+                    showAuthors();
                 case 0:
                     flag = false;
                     break;
@@ -38,6 +43,11 @@ public class ConsoleApplication {
                     System.out.println("zla opcja");
             }
         }
+    }
+
+    private void showAuthors() {
+        Map<String, Long> authors = booksService.getAuthors();
+        consoleViews.displayAuthors(authors);
     }
 
     private void showBooks() {
