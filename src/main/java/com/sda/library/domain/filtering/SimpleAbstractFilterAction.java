@@ -11,7 +11,7 @@ public abstract class SimpleAbstractFilterAction implements FilterAction {
     @Override
     public boolean isMyResponsibility(Map<String, Object> parameters) {
         return parameters.containsKey(getKey());
-    }
+}
 
     @Override
     public Stream<Book> action(Stream<Book> stream, Map<String, Object> parameters) {
