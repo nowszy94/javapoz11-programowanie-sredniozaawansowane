@@ -60,7 +60,7 @@ public class ConsoleViews {
     }
 
     private void displayShortenedBook(Book book) {
-        System.out.println(book.getTitle() + " (" + book.getYear() + ") - " + book.getAuthor());
+        System.out.println(book.getId() + ". " + book.getTitle() + " (" + book.getYear() + ") - " + book.getAuthor());
     }
 
     public String getAuthor() {
@@ -96,5 +96,23 @@ public class ConsoleViews {
     public void displayAuthors(Map<String, Long> authors) {
         authors.entrySet()
                 .forEach(e -> System.out.println(e.getKey() + " - " + e.getValue()));
+    }
+
+    public String getBookId() {
+        System.out.println("Podaj identyfikator ksiazki");
+        return scanner.nextLine();
+    }
+
+    public String getUsername() {
+        System.out.println("Podaj nazwe uzytkownika");
+        return scanner.nextLine();
+    }
+
+    public void borrowSuccess(String bookTitle) {
+        System.out.println("Brawo! Udalo sie wypozyczyc ksiazke " + bookTitle);
+    }
+
+    public void borrowFailure() {
+        System.out.println("Nie udalo sie wypozyczyc ksiazki");
     }
 }

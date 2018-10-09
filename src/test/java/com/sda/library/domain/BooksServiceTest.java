@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class BooksServiceTest {
 
@@ -23,9 +24,9 @@ public class BooksServiceTest {
         this.booksRepository = Mockito.mock(BooksRepository.class);
         Mockito.when(booksRepository.findAll()).thenReturn(
                 Arrays.asList(
-                        Book.builder().title("Dziady III").author("Adam Mickiewicz").year(2000).language("Polish").pages(250).build(),
-                        Book.builder().title("Dziady IV").author("Adam Mickiewicz").year(1999).language("Polish").pages(190).build(),
-                        Book.builder().title("W pustyni i w puszczy").author("Henryk Sienkiewicz").year(2000).language("Polish").pages(150).build())
+                        Book.builder().id("id-1").title("Dziady III").author("Adam Mickiewicz").year(2000).language("Polish").pages(250).build(),
+                        Book.builder().id("id-2").title("Dziady IV").author("Adam Mickiewicz").year(1999).language("Polish").pages(190).build(),
+                        Book.builder().id("id-3").title("W pustyni i w puszczy").author("Henryk Sienkiewicz").year(2000).language("Polish").pages(150).build())
         );
         this.booksService = new BooksService(booksRepository);
     }
@@ -301,5 +302,34 @@ public class BooksServiceTest {
         //then
         Assert.assertEquals(authors.get("Adam Mickiewicz"), new Long(2));
         Assert.assertEquals(authors.get("Henryk Sienkiewicz"), new Long(1));
+    }
+
+    //dodac testy dla findById
+
+    @Test
+    public void findByIdShouldReturnBookForExistingId() {
+        //given
+        String id = "id-1";
+        String expectedTitle = "Dziady III";
+
+        //when
+        Optional<Book> book = booksService.findById(id);
+
+        //then
+        Assert.assertTrue(book.isPresent());
+        Assert.assertEquals(id, book.get().getId());
+        Assert.assertEquals(expectedTitle, book.get().getTitle());
+    }
+
+    @Test
+    public void findByIdShouldNotReturnBookForNonExistingId() {
+        //given
+        String id = "non-existing-id";
+
+        //when
+        Optional<Book> book = booksService.findById(id);
+
+        //then
+        Assert.assertFalse(book.isPresent());
     }
 }

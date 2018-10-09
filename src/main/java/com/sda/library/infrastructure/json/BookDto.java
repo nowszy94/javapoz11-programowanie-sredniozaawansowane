@@ -30,8 +30,9 @@ public class BookDto {
         this.year = year;
     }
 
-    public Book mapToDomain() {
+    public Book mapToDomain(Integer id) {
         return Book.builder()
+                .id(id.toString())
                 .author(author)
                 .country(country)
                 .language(language)
