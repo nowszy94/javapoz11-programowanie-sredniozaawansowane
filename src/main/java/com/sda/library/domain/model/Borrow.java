@@ -1,11 +1,14 @@
 package com.sda.library.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class Borrow {
     private Book book;
     private String user;

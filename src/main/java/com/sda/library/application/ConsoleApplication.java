@@ -5,6 +5,7 @@ import com.sda.library.domain.BorrowService;
 import com.sda.library.domain.exceptions.InvalidPagesValueException;
 import com.sda.library.domain.model.Book;
 import com.sda.library.domain.model.Borrow;
+import com.sda.library.domain.model.BorrowStatus;
 import com.sda.library.domain.port.BooksRepository;
 import com.sda.library.infrastructure.json.JsonBooksRepository;
 import com.sda.library.infrastructure.memory.InMemoryBorrowRepository;
@@ -41,6 +42,10 @@ public class ConsoleApplication {
                     break;
                 case 2:
                     showAuthors();
+                    break;
+                case 3:
+                    borrows();
+                    break;
                 case 0:
                     flag = false;
                     break;
@@ -48,6 +53,12 @@ public class ConsoleApplication {
                     System.out.println("zla opcja");
             }
         }
+    }
+
+    private void borrows() {
+        String username = consoleViews.getUsername();
+        List<Borrow> borrowedByUser = borrowService.findByUserAndStatus(username, BorrowStatus.BORROWED);
+        consoleViews.displayBorrows(borrowedByUser);
     }
 
     private void showAuthors() {

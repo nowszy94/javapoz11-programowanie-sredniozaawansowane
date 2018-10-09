@@ -2,9 +2,12 @@ package com.sda.library.domain;
 
 import com.sda.library.domain.model.Book;
 import com.sda.library.domain.model.Borrow;
+import com.sda.library.domain.model.BorrowStatus;
 import com.sda.library.domain.port.BorrowRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BorrowService {
 
@@ -26,4 +29,11 @@ public class BorrowService {
         return borrow;
     }
 
+    public List<Borrow> findByUserAndStatus(String username, BorrowStatus status) {
+        return borrowRepository.findAll()
+                .stream()
+                .filter(e -> username.equals(e.getUser()))
+                .filter(e -> status.equals(e.getBorrowStatus()))
+                .collect(Collectors.toList());
+    }
 }

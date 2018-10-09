@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class BorrowServiceTest {
@@ -45,4 +47,44 @@ public class BorrowServiceTest {
         Mockito.verify(borrowRepository, Mockito.times(1)).save(Mockito.any());
     }
 
+    @Test
+    public void findByUserAndStatusShouldReturnBorrowsForExistingUserAndBorrowedStatus() {
+        //given
+        Mockito.when(borrowRepository.findAll()).thenReturn(
+                Arrays.asList(
+                        Borrow.builder()
+                                .user("test-user")
+                                .borrowStatus(BorrowStatus.BORROWED)
+                                .book(Book.builder().id("id-1").title("Dzieci z Bulerbyn").build())
+                                .build(),
+                        Borrow.builder()
+                                .user("test-user")
+                                .borrowStatus(BorrowStatus.BORROWED)
+                                .book(Book.builder().id("id-2").title("Dziady IV").build())
+                                .build(),
+                        Borrow.builder()
+                                .user("admin-user")
+                                .borrowStatus(BorrowStatus.BORROWED)
+                                .book(Book.builder().id("id-3").title("Folwark zwierzecy").build())
+                                .build(),
+                        Borrow.builder()
+                                .user("test-user")
+                                .borrowStatus(BorrowStatus.RETURNED)
+                                .book(Book.builder().id("id-4").title("W pustyni i w puszczy").build())
+                                .build()
+                        )
+        );
+
+        String username = "test-user";
+        BorrowStatus status = BorrowStatus.BORROWED;
+
+        //when
+        List<Borrow> borrows = borrowService.findByUserAndStatus(username, status);
+
+        //then
+        Assert.assertEquals(2, borrows.size());
+        borrows.forEach(e ->
+                Assert.assertTrue(username.equals(e.getUser()) && status.equals(e.getBorrowStatus()))
+        );
+    }
 }
